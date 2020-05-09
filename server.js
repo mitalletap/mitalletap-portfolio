@@ -8,4 +8,4 @@ app.use(express.static(path.join(__dirname, "client", "build")));
 
 app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`)
-})
+}) 
