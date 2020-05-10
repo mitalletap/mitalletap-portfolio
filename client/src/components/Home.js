@@ -14,11 +14,10 @@ class Home extends Component {
 
 
     componentDidMount() {
-        this.setState({ data: Data });
         const API= `http://localhost:8080/api/data`;
         return fetch(API, { method: 'GET' })
         .then(res => res.json())
-        .then((result) => this.setState({ message: true }))
+        .then((result) => this.setState({ message: true, data: result }))
         .catch((err) => this.setState({ message: false }));
     }
 
