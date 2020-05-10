@@ -22,11 +22,8 @@ db.once('open', () => {
     console.log("MongoDB database connection established successfully");
 })
 
-app.get('/', (req, res) => {
-    res.json({ "status": "connected" })
-})
 
-app.get('/admin', (req, res) => {
+app.get('/data', (req, res) => {
     const data = [{
         "projectName": "portfolio",
         "githubUrl": "http://github.com/mitalletap/mitalletap-portfolio",
