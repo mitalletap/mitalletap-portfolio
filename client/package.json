@@ -21,7 +21,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "test:ci": "cross-env CI=true react-scripts test --no-watchman",
+    "test:ci": "CI=true react-scripts test --no-watchman",
     "test:coverage": "react-scripts test --coverage --watch-all",
     "eject": "react-scripts eject"
   },
