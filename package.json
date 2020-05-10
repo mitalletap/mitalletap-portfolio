@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "jest",
-    "start": "concurrently \"pm2 restart server.js\" \"cd client && npm start\"",
+    "start": "concurrently -n 'server,client' -c 'blue,green' \"pm2 restart server.js\" \"cd client && npm start\"",
     "update-project": "concurrently \"npm install\" \"cd client && npm install\""
   },
   "repository": {
