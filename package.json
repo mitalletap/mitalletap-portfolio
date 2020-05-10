@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest",
     "start": "concurrently -n 'server,client' -c 'magenta,cyan' \"pm2 restart server.js\" \"cd client && pm2 restart npm\"",
+    "build:deploy": "serve -s build -l 3000",
     "update-project": "concurrently -n 'updating server,updating client' -c 'blue,green' \"npm install\" \"cd client && npm install\"",
     "stop": "concurrently -n 'stopping server,stopping client' -c 'red,yellow' \"pm2 stop server.js\" \"cd client && pm2 stop npm\""
   },
