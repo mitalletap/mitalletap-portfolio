@@ -5,8 +5,9 @@
   "main": "server.js",
   "scripts": {
     "test": "jest",
-    "start": "concurrently -n 'server,client' -c 'blue,green' \"pm2 restart server.js\" \"cd client && npm start\"",
-    "update-project": "concurrently \"npm install\" \"cd client && npm install\""
+    "start": "concurrently -n 'server,client' -c 'magenta,cyan' \"pm2 restart server.js\" \"cd client && pm2 restart npm\"",
+    "update-project": "concurrently -n 'updating server,updating client' -c 'blue,green' \"npm install\" \"cd client && npm install\"",
+    "stop": "concurrently -n 'stopping server,stopping client' -c 'red,yellow' \"pm2 stop server.js\" \"cd client && pm2 stop npm\""
   },
   "repository": {
     "type": "git",
