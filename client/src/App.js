@@ -18,6 +18,9 @@ class App extends Component {
     return (  
       <div className="app-container">
       <Router>
+        <Link to="/"> Home </Link>
+        <br />
+        <Link to="/admin"> Admin </Link>
         <Switch className="app-content-items">
           <Route exact path="/"><Home /></Route>
           <Route exact path="/admin"><Admin /></Route>
