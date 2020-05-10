@@ -22,8 +22,7 @@ db.once('open', () => {
     console.log("MongoDB database connection established successfully");
 })
 
-
-app.get('/data', (req, res) => {
+app.get('/api/data', (req, res) => {
     const data = [{
         "projectName": "portfolio",
         "githubUrl": "http://github.com/mitalletap/mitalletap-portfolio",
@@ -62,7 +61,7 @@ app.get('/data', (req, res) => {
     res.json(data);
 });
 
-app.use(express.static(path.join(__dirname, "client", "build")));
+// app.use(express.static(path.join(__dirname, "client", "build")));
 
 app.listen(port, () => {
     console.log(`Server is listening on port ${port}`)
