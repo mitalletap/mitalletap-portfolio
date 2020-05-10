@@ -32,7 +32,7 @@ describe('tests the home page', () => {
             })
             global.fetch = () => fetchPromise;
             await instance.componentDidMount();
-            expect(app.state('message')).toBe(true); 
+            expect(app.state('message')).toBe(false); 
             
         });
 
