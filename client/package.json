@@ -22,7 +22,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "test:ci": "react-scripts test --no-watchman",
-    "test:coverage": "react-scripts test --coverage --watch-all",
+    "test:coverage": "cross-env CI=true react-scripts test --coverage --watch-all",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
