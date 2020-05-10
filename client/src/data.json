@@ -1,37 +1,37 @@
 [
     {
         "projectName": "portfolio",
-        "githubUrl": "https://github.com/mitalletap/mitalletap-portfolio",
-        "demoUrl": "mitalletap.io",
-        "image": "https://www.denofgeek.com/wp-content/uploads/2020/05/star-wars-ahsoka-tano.png?resize=768%2C432",
+        "githubUrl": "http://github.com/mitalletap/mitalletap-portfolio",
+        "demoUrl": "http://www.mitalletap.io",
+        "image": "https://s3.us-east-2.amazonaws.com/mitalletap.io/ahsoka.jpg",
         "description": "This is my portfolio! Check it out!"
     },
     {
         "projectName": "twitter",
-        "githubUrl": "https://github.com/mitalletap/social-media-website",
-        "demoUrl": "mitalletap.com",
-        "image": "https://www.denofgeek.com/wp-content/uploads/2020/04/star-wars-the-clone-wars-season-7-episode-10-review-1.jpg?resize=768%2C432",
+        "githubUrl": "http://github.com/mitalletap/social-media-website",
+        "demoUrl": "http://www.mitalletap.com",
+        "image": "https://s3.us-east-2.amazonaws.com/mitalletap.io/maul.jpg",
         "description": "Twitter App!"
     },
     {
         "projectName": "flight app",
-        "githubUrl": "https://github.com/mitalletap/uh-sdp-flight-app",
-        "demoUrl": "mitalletap.io",
-        "image": "https://www.laughingplace.com/w/wp-content/uploads/2020/02/friday-228-tv-recap-star-wars-the-clone-wars-season-7-episode-2-a-distant-echo-1.jpeg",
+        "githubUrl": "http://github.com/mitalletap/uh-sdp-flight-app",
+        "demoUrl": "http://www.mitalletap.io",
+        "image": "https://s3.us-east-2.amazonaws.com/mitalletap.io/obi-wan.jpeg",
         "description": "Flight App!"
     },
     {
         "projectName": "blog",
-        "githubUrl": "https://github.com/mitalletap/Saas",
-        "demoUrl": "mitalletap.com",
-        "image": "https://www.laughingplace.com/w/wp-content/uploads/2020/02/friday-228-tv-recap-star-wars-the-clone-wars-season-7-episode-2-a-distant-echo.jpeg",
+        "githubUrl": "http://github.com/mitalletap/Saas",
+        "demoUrl": "http://www.mitalletap.com",
+        "image": "https://s3.us-east-2.amazonaws.com/mitalletap.io/rex.jpeg",
         "description": "Blog"
     },
     {
-        "projectName": "mitalletap.io",
-        "githubUrl": "https://github.com/mitalletap/mitalletap-portfolio",
+        "projectName": "http://www.mitalletap.io",
+        "githubUrl": "http://github.com/mitalletap/mitalletap-portfolio",
         "demoUrl": "mitalletap.io",
-        "image": "https://imgix.bustle.com/uploads/image/2020/2/27/d0eaf71a-cfb1-440b-ae89-f38cbe789c29-anakin-clone-wars-season-7.jpeg?w=2000&h=640&auto=format%2Ccompress&cs=srgb&q=70&fit=crop&crop=faces&dpr=2",
+        "image": "https://s3.us-east-2.amazonaws.com/mitalletap.io/anakin.jpeg",
         "description": "Mitalletap.io!"
     }
 

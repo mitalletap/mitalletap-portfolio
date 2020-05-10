@@ -22,7 +22,7 @@ class CustomCard extends Component {
         return (  
             <div style={{ paddingLeft: "20px"}}>
                 <Card>
-                    <CardActionArea > 
+                    <CardActionArea> 
                         <CardMedia style={{height: "300px"}} image={this.props.image} title="Contemplative Reptile" />
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="h2">

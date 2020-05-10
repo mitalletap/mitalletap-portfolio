@@ -36,3 +36,20 @@
     transform: rotate(360deg);
   }
 }
+
+
+.admin-page {
+
+  margin: 0;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  text-align: center;
+}
+
+.admin-grid {
+  padding-top: 100px;
+  width: 250px;
+  align-items: center;
+  justify-content: center;
+}
