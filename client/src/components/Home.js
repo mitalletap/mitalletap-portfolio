@@ -14,10 +14,11 @@ class Home extends Component {
 
 
     componentDidMount() {
-        const API= `http://localhost:8080/api/data`;
+        this.setState({ data: Data });
+        const API= `http://mitalletap.io:8080/api/data`;
         return fetch(API, { method: 'GET' })
         .then(res => res.json())
-        .then((result) => this.setState({ message: true, data: result }))
+        .then((result) => this.setState({ message: true }))
         .catch((err) => this.setState({ message: false }));
     }
 
