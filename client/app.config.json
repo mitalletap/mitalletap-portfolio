@@ -4,7 +4,7 @@
         "name": "client",
         "script": "npx",
         "interpreter": "none",
-        "args": "serve -S build -l 3000"
+        "args": "serve -s build -l 3000"
       }
     ]
   }
