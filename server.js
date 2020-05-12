@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require('cors');
 const path = require("path");
-
+const aws = require('aws-sdk');
 
 require('dotenv').config();
 
@@ -13,6 +13,11 @@ const port = 8080;
 app.use(cors());
 app.use(express.json());
 
+aws.config.update({
+    region: process.env.BUCKET_REGION,
+    accessKeyId: process.env.S3_KEY,
+    secretAccessKey: process.env.S3_SECRET
+})
 
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
@@ -60,7 +65,6 @@ app.get('/api/data', (req, res) => {
     }]
     res.json(data);
 });
-
 
 app.use(express.static(path.join(__dirname, "client", "build")));
 

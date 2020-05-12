@@ -6,21 +6,13 @@ import Home from './components/Home';
 import Admin from './components/Admin';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: []
-    }
-  }
 
   render() { 
-    const { data } = this.state;
     return (  
       <div className="app-container">
       <Router>
-        <Link to="/"> Home </Link>
-        <br />
-        <Link to="/admin"> Admin </Link>
+        <Link to="/"></Link>
+        <Link to="/admin"></Link>
         <Switch className="app-content-items">
           <Route exact path="/"><Home /></Route>
           <Route exact path="/admin"><Admin /></Route>
