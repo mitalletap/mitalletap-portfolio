@@ -3,6 +3,7 @@ import { shallow, mount } from 'enzyme';
 import Admin from '../components/Admin';
 import TextField from '@material-ui/core/TextField';
 import fetchMock from 'fetch-mock';
+import aws, { S3 } from 'aws-sdk';
 
 describe('tests the admin page', () => {
 
@@ -11,6 +12,10 @@ describe('tests the admin page', () => {
     beforeEach(() => {
         app = shallow(<Admin />);
     });
+
+    afterEach(() => {
+        fetchMock.restore();
+    })
 
     it('should match page snapshot', () => {
         expect(app).toMatchSnapshot();
@@ -49,12 +54,11 @@ describe('tests the admin page', () => {
         });
 
         it('tests file selected', () => {
-            app.find('input').simulate('change', { target: { files: [{ name: "file selected" }] } });
+            const newInput = "file selected";
+            app.find('input').simulate('change', { target: { files: [{ name: newInput }] } });
             expect(app.state('fileData')).toEqual({ name: "file selected" });
-            expect(app.state('image')).toEqual("file selected");
         });
 
-        
         it('tests valid and invalid submissions', () => {
             app.setState({
                 fileName: 'test',
@@ -73,7 +77,6 @@ describe('tests the admin page', () => {
         });
     });
 
-
     describe('ui interactions', () => {
 
         let app, instance;
@@ -81,21 +84,11 @@ describe('tests the admin page', () => {
         beforeEach(() => {
             app = mount(<Admin />);
             instance = app.instance();
+            instance.setState({ status: 'true' })
         })
 
         afterEach(() => {
             fetchMock.restore();
-        });
-
-        it('verifies state changes on `handle submit`', async () => {
-            const fetchPromise = Promise.resolve({
-                json: () => Promise.resolve(true)
-            })
-
-            global.fetch = () => fetchPromise;
-            await instance.handleSubmit();
-            // expect(app.state('status')).toBe("true");
-            // expect(app.state('open')).toBe(true);
         });
 
         it('verifies state changes on `handle close`', async () => {
@@ -109,5 +102,51 @@ describe('tests the admin page', () => {
         });
 
     });
+
+    describe('api calls', () => {
+
+        it('tests the s3 upload', async () => {
+            app.instance().setState({
+                projectName: "projectName",
+                fileName: "fileName",
+                githubUrl: "githubUrl",
+                demoUrl: "demoUrl",
+                description: "description",
+                image_url: "image_url"
+            })
+
+            const fetchPromise = Promise.resolve({
+                json: () => Promise.resolve({ status: 200 })
+            })
+            global.fetch = () => fetchPromise;
+            await app.instance().handleSubmit();
+        });
+
+        it('save project schema to database', async () => {
+            const data = {
+                projectName: "projectName",
+                fileName: "fileName",
+                githubUrl: "githubUrl",
+                demoUrl: "demoUrl",
+                description: "description",
+                image_url: "image_url"
+            }
+        
+            const successfulPromise = Promise.resolve({
+                json: () => Promise.resolve(data)
+            })
+            global.fetch = () => successfulPromise;
+
+
+            const failedPromise = Promise.reject({
+                json: () => Promise.reject({ status: 500 })
+            })
+            global.fetch = () => failedPromise;
+            await app.instance().handleSaveToDatabase();
+        });
+
+    });
+
+
 
 });

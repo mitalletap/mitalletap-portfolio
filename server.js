@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require('cors');
 const path = require("path");
+const projectRoutes = require('./routes/project');
 const aws = require('aws-sdk');
 
 require('dotenv').config();
@@ -65,6 +66,7 @@ app.get('/api/data', (req, res) => {
     }]
     res.json(data);
 });
+app.use('/project', projectRoutes);
 
 app.use(express.static(path.join(__dirname, "client", "build")));
 

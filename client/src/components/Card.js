@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Image from '../images/ahsoka.jpg';
+import Image from '../images/ImageNotFound.png';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -15,15 +15,34 @@ class CustomCard extends Component {
     constructor(props) {
       super(props);
       this.state = {
-  
+        image: null
       }
     }
+
+    componentDidMount() {
+        this.checkImagePermissions(this.props.image);
+    }
+    
+
+
+    checkImagePermissions = (i) => {
+        fetch(i)
+        .then((res) => {
+            if(res.status !== 200) {
+                this.setState({ image: 'https://s3.us-east-2.amazonaws.com/mitalletap.io/mitalletap.io_default_imagenotfound.png'});
+            } else {
+                this.setState({ image: null });
+            }
+        })
+    }
+
+
     render() { 
         return (  
             <div style={{ paddingLeft: "20px"}}>
-                <Card>
+                <Card raised={true}>
                     <CardActionArea> 
-                        <CardMedia style={{height: "300px"}} image={this.props.image} title="Contemplative Reptile" />
+                        <CardMedia style={{height: "300px"}} image={this.state.image === null ? this.props.image : this.state.image} title="Contemplative Reptile" />
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="h2">
                                 {this.props.projectName}

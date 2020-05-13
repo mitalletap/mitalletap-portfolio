@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import S3 from 'react-aws-s3';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import '../App.css';
 
@@ -23,19 +24,18 @@ class Admin extends Component {
         clicked: false,
         completed: false,
         status: "",
-        open: false
+        open: false,
+        image_url: '',
+        loaded: true
       }
 
 
     }
 
-    componentDidMount()
- {
-     
- }
     allFieldsComplete() {
-        const { fileName, projectName, githubUrl, demoUrl, description, fileData } = this.state;
-        return (githubUrl !== "" && projectName !== '' && demoUrl !== '' && description !== '' && fileData.size > 0);
+        const { fileName, projectName, githubUrl, demoUrl, description, fileData, fileType } = this.state;
+        return (githubUrl !== "" && fileName !== "" && projectName !== '' && demoUrl !== '' && description !== '' && fileType !== '');
+        
     }
 
     handleProjectName = e => {
@@ -43,7 +43,9 @@ class Admin extends Component {
     } 
     
     handleFileName = e => {
-        this.setState({ fileName: e.target.value })
+        var value = e.target.value;
+        value = value.replace(/\s+/g,"+");
+        this.setState({ fileName: e.target.value, image: value })
     }
 
     handleGithub = e => {
@@ -62,12 +64,16 @@ class Admin extends Component {
     }
 
     handleFileSelected = e => {
-        this.setState({ image: e.target.files[0].name, fileData: e.target.files[0] });
+        var params = String(e.target.files[0].type);
+        var pos = params.indexOf('/');
+        var type = params.substring(pos + 1);
+        this.setState({ fileData: e.target.files[0], fileType: type });
     }
 
 
     handleSubmit = () => {
-        const { fileData, fileName } = this.state;
+        const { fileData, fileName, fileType, image } = this.state;
+        this.setState({ loaded: false });
         const config = {
             bucketName: process.env.REACT_APP_BUCKET_NAME,
             region: process.env.REACT_APP_BUCKET_REGION,
@@ -76,12 +82,43 @@ class Admin extends Component {
             s3Url: `https://s3.${process.env.REACT_APP_BUCKET_REGION}.amazonaws.com/${process.env.REACT_APP_BUCKET_NAME}`
         }
 
+        const publicURL = config.s3Url +`/${image}.${fileType}`;
+        this.setState({ image_url: publicURL });
+
         const Client = new S3(config);
         Client.uploadFile(fileData, fileName)
-        .then((res) => this.setState({ status: "true", open: true }))
-        .catch((err) => this.setState({ status: "false", open: true }));
+        .then((res) => this.setState({ status: "true", open: true}, this.handleSaveToDatabase))
+        .catch((err) => this.setState({ status: "falseS3", open: true, loading: false }));
+
+        
 
         this.setState({ clicked: true, completed: true });
+        
+    }
+
+
+    handleSaveToDatabase = () => {
+        const { projectName, fileName, githubUrl, demoUrl, description, image_url, progress } = this.state;
+        const data = {
+            "project_name": projectName,
+            "file_name": fileName,
+            "github_url": githubUrl,
+            "demo_url": demoUrl,
+            "description": description,
+            "image_url": image_url,
+        }
+        
+        const API= `http://localhost:8080/project/`;
+        fetch(API, {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'content-type': 'application/json'
+            }
+        })
+        .then(this.setState({ loaded: true }))
+        .catch((err) => this.setState({ status: "falseDB", open: true, loaded: false }));
+
     }
 
     handleClose = () => {
@@ -89,24 +126,29 @@ class Admin extends Component {
           ...this.state,
           open: false,
         });
-      };
+    };
 
     render() { 
-        const { image, projectNam, completed, open } = this.state;
+        const { image, projectNam, completed, open, loaded } = this.state;
         const horizontal = "center";
         const vertical = "top";
         return (  
             <div className="admin-page">
-                <Snackbar open={open} autoHideDuration={1000} onClose={this.handleClose} anchorOrigin={{ vertical, horizontal }}>
+                <Snackbar open={open} autoHideDuration={5000} onClose={this.handleClose} anchorOrigin={{ vertical, horizontal }} style={{ width: "100px" }}>
                     {
                         this.state.status === "true" ?
                         <Alert severity="success">
                             Successfully saved Project!
                         </Alert> 
+                        : this.state.status === "falseDB" ?
+                        <Alert severity="error">
+                            Failed to save project to the Database!
+                        </Alert>
                         :
                         <Alert severity="error">
-                            Failed to save Project!
+                            Failed to upload image to S3 and projct to the Database!
                         </Alert>
+
                     }
                 </Snackbar>
                 <h1> Admin Page </h1>
@@ -128,7 +170,7 @@ class Admin extends Component {
                             <TextField id="user-description" size="small" label="Description" variant="outlined" onChange={this.handleDescription}/>
                         </Grid>
                         <Grid item xs={12}>
-                            <input accept="image/*" id="icon-button-file" type="file" onChange={this.handleFileSelected}/>
+                            <input style={{ display: "none" }} accept="image/*" id="icon-button-file" type="file" onChange={this.handleFileSelected}/>
                             <label htmlFor="icon-button-file">
                                 <Button variant="contained" color="primary" component="span"> Upload Image </Button>
                             </label>
@@ -137,11 +179,10 @@ class Admin extends Component {
                             <TextField id="standard-multiline-static" InputProps={{ readOnly: true }} placeholder={image} rows={4} />
                         </Grid>
                         <Grid item xs={12}>
-                                <Button disabled={!this.allFieldsComplete()} className="submit-button" variant="contained" color="primary" component="span" onClick={this.handleSubmit}> Submit Information </Button>
+                                <Button disabled={!this.allFieldsComplete() || loaded === false} className="submit-button" variant="contained" color="primary" component="span" onClick={this.handleSubmit}> Submit Information {loaded === false && <CircularProgress size={24} style={{ position: "absolute" }}/>} </Button>
                         </Grid>
                     </Grid>
                 </div>
-            <button onClick={() => console.log(this.state)}> state </button>
             </div>
         );
     }
