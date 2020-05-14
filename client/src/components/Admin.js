@@ -6,6 +6,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import S3 from 'react-aws-s3';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import HelperFunctions from '../helpers/helper';
 
 import '../App.css';
 
@@ -26,16 +27,20 @@ class Admin extends Component {
         status: "",
         open: false,
         image_url: '',
-        loaded: true
+        loaded: true,
+        envState: ''
       }
-
-
     }
+
+    componentDidMount() {
+        var envVar = HelperFunctions.getEnvironmentStatus();
+        this.setState({ envState: envVar })
+    }
+
 
     allFieldsComplete() {
         const { fileName, projectName, githubUrl, demoUrl, description, fileData, fileType } = this.state;
         return (githubUrl !== "" && fileName !== "" && projectName !== '' && demoUrl !== '' && description !== '' && fileType !== '');
-        
     }
 
     handleProjectName = e => {
@@ -50,17 +55,14 @@ class Admin extends Component {
 
     handleGithub = e => {
         this.setState({ githubUrl: e.target.value })
-        
     }
 
     handleDemo = e => {
         this.setState({ demoUrl: e.target.value })
-        
     }
 
     handleDescription = e => {
         this.setState({ description: e.target.value })
-
     }
 
     handleFileSelected = e => {
@@ -84,21 +86,16 @@ class Admin extends Component {
 
         const publicURL = config.s3Url +`/${image}.${fileType}`;
         this.setState({ image_url: publicURL });
-
         const Client = new S3(config);
         Client.uploadFile(fileData, fileName)
         .then((res) => this.setState({ status: "true", open: true}, this.handleSaveToDatabase))
         .catch((err) => this.setState({ status: "falseS3", open: true, loading: false }));
-
-        
-
         this.setState({ clicked: true, completed: true });
-        
     }
 
 
-    handleSaveToDatabase = () => {
-        const { projectName, fileName, githubUrl, demoUrl, description, image_url, progress } = this.state;
+    handleSaveToDatabase = () => { 
+        const { projectName, fileName, githubUrl, demoUrl, description, image_url, progress, envState } = this.state;
         const data = {
             "project_name": projectName,
             "file_name": fileName,
@@ -107,8 +104,7 @@ class Admin extends Component {
             "description": description,
             "image_url": image_url,
         }
-        
-        const API= `http://localhost:8080/project/`;
+        const API= `http://${envState}/project/`;
         fetch(API, {
             method: 'POST',
             body: JSON.stringify(data),
@@ -118,7 +114,6 @@ class Admin extends Component {
         })
         .then(this.setState({ loaded: true }))
         .catch((err) => this.setState({ status: "falseDB", open: true, loaded: false }));
-
     }
 
     handleClose = () => {
@@ -129,7 +124,7 @@ class Admin extends Component {
     };
 
     render() { 
-        const { image, projectNam, completed, open, loaded } = this.state;
+        const { image, projectNam, completed, open, loaded, envState } = this.state;
         const horizontal = "center";
         const vertical = "top";
         return (  
@@ -148,7 +143,6 @@ class Admin extends Component {
                         <Alert severity="error">
                             Failed to upload image to S3 and projct to the Database!
                         </Alert>
-
                     }
                 </Snackbar>
                 <h1> Admin Page </h1>

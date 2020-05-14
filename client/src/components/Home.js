@@ -2,18 +2,22 @@ import React, { Component } from 'react';
 import Data from '../data.json';
 import Grid from '@material-ui/core/Grid';
 import Card from './Card';
+import HelperFunctions from '../helpers/helper';
 
 class Home extends Component {
     constructor(props) {
       super(props);
       this.state = {
         data: [],
+        envState: ''
       }
     }
 
 
     componentDidMount() {
-        const API= `http://localhost:8080/project/all`;     // ========================================================================== ==> SET THIS API TO "MITALLETAP.IO:8080" WHEN IN PRODUCTION BUILD
+        var envVar = HelperFunctions.getEnvironmentStatus();
+        this.setState({ envState: envVar })
+        const API= `http://${envVar}/project/all`;     // ========================================================================== ==> SET THIS API TO "MITALLETAP.IO:8080" WHEN IN PRODUCTION BUILD
         return fetch(API, { method: 'GET' })
         .then(res => res.json())
         .then((result) => this.setState({ data: result }))
