@@ -13,7 +13,7 @@ class Home extends Component {
 
 
     componentDidMount() {
-        const API= `http://localhost:8080/project/all`;
+        const API= `http://mitalletap.io:8080/project/all`;     // ========================================================================== ==> SET THIS API TO "MITALLETAP.IO:8080" WHEN IN PRODUCTION BUILD
         return fetch(API, { method: 'GET' })
         .then(res => res.json())
         .then((result) => this.setState({ data: result }))
