@@ -20,7 +20,7 @@ router.get('/all', (req, res) => {
             res.json("Soemthing went wrong")
             next();
         } else {
-            console.log("RESULT: " + post);
+            console.log("Accessing the list of projects");
             res.json(post);
         }
     });
@@ -37,7 +37,7 @@ router.post('/', (req, res) => {
             description: req.body.description,
             image_url: req.body.image_url,
         });
-        newProject.save().then(() => console.log("Saved " + newPost.message)).catch((err) => console.log(err));
+        newProject.save().then(() => console.log("Saved " + newProject.project_name)).catch((err) => console.log(err));
 })
 
 module.exports = router;
