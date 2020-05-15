@@ -17,7 +17,7 @@ class Home extends Component {
     componentDidMount() {
         var envVar = HelperFunctions.getEnvironmentStatus();
         this.setState({ envState: envVar })
-        const API= `http://${envVar}/project/all`;     // ========================================================================== ==> SET THIS API TO "MITALLETAP.IO:8080" WHEN IN PRODUCTION BUILD
+        const API= `http://${envVar}/project/all`;
         return fetch(API, { method: 'GET' })
         .then(res => res.json())
         .then((result) => this.setState({ data: result }))
